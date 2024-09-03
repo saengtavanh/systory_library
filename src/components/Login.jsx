@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/systory-logo.png";
 
 const Login = (props) => {
+  const IP_ADDRESS = import.meta.env.VITE_IP_ADDRESS;
   const [userInput, setUserInput] = useState(null);
   const [password, setPassword] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,7 @@ const Login = (props) => {
     setLoading(true);
     try {
       if (!userInput || !password) return;
-      const response = await axios.post("http://localhost:3001/getUser", {
+      const response = await axios.post(`${IP_ADDRESS}/getUser`, {
         userInput,
         password,
       });

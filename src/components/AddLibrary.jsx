@@ -9,6 +9,7 @@ import ImageInput from "./ImageInput";
 
 function AddLibrary() {
   const navigate = useNavigate();
+  const IP_ADDRESS = import.meta.env.VITE_IP_ADDRESS;
 
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem("username");
@@ -210,7 +211,7 @@ function AddLibrary() {
     console.log("Client", record);
     try {
       const response = await axios
-        .post("http://localhost:3001/addLibrary", formData, {
+        .post(`${IP_ADDRESS}/addLibrary`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

@@ -8,6 +8,7 @@ import Spinner from "./Spinner";
 function MainContent({ records }) {
   const [fileUrls, setFileUrls] = useState([]);
   const [loading, setLoading] = useState(true);
+  const IP_ADDRESS = import.meta.env.VITE_IP_ADDRESS;
 
   const location = useLocation();
   // console.log('location', location);
@@ -49,7 +50,7 @@ function MainContent({ records }) {
       const files = await Promise.all(
         FILE.value.map(async (file) => {
           const response = await axios.get(
-            `http://localhost:3001/api/file/${file.fileKey}`,
+            `${IP_ADDRESS}/api/file/${file.fileKey}`,
             { responseType: "blob" }
           );
           const url = URL.createObjectURL(response.data);
@@ -101,7 +102,7 @@ function MainContent({ records }) {
                 {IMAGE && IMAGE.value.length > 0 ? (
                   <>
                     <img
-                      src={`http://localhost:3001/api/image/${IMAGE.value[0].fileKey}`}
+                      src={`${IP_ADDRESS}/api/image/${IMAGE.value[0].fileKey}`}
                       alt="Item Image"
                       className="libraly-img"
                     />

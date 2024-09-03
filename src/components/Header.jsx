@@ -10,6 +10,7 @@ function Header({ records }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const IP_ADDRESS = import.meta.env.VITE_IP_ADDRESS;
   // console.log("Location :", location);
   const query = new URLSearchParams(location.search);
   const LibraryId = query.get("id");
@@ -64,7 +65,7 @@ function Header({ records }) {
         if (result.isConfirmed) {
           try {
             const response = await axios.delete(
-              `http://localhost:3001/delete/record/${id}`
+              `${IP_ADDRESS}/delete/record/${id}`
             );
             swalWithBootstrapButtons
               .fire({

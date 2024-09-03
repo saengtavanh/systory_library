@@ -10,6 +10,7 @@ import ImageInput from "./ImageInput";
 
 function EditLibrary({ records }) {
   const navigate = useNavigate();
+  const IP_ADDRESS = import.meta.env.VITE_IP_ADDRESS;
 
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem("username");
@@ -315,7 +316,7 @@ function EditLibrary({ records }) {
     // console.log("Client", record);
     try {
       await axios
-        .post("http://localhost:3001/Update/Data", formData, {
+        .post(`${IP_ADDRESS}/Update/Data`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
