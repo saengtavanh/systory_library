@@ -24,6 +24,8 @@ const Code = ({ code }) => {
   const [codeType, setCodeType] = useState("");
 
   const copyToClipboard = () => {
+
+    console.log(navigator);
     navigator.clipboard
       .writeText(copyText)
       .then(() => {

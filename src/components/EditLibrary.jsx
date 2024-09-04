@@ -67,7 +67,7 @@ function EditLibrary({ records }) {
       setInstallationDes(libraryData.DESCRIPTIONS_INS.value || "");
       setHowToUseDes(libraryData.DESCRIPTIONS_HTU.value || "");
       setExampleDes(libraryData.DESCRIPTIONS_EXP.value || "");
-      setOverviewDes(libraryData.DESCRIPTIONS_INS.value || "");
+      setOverviewDes(libraryData.DESCRIPTIONS_OVER.value || "");
       setSuggestionDes(libraryData.DESCRIPTIONS_SGT.value || "");
 
       // Table inatallations
