@@ -1,5 +1,4 @@
 import "./Header.css";
-// import * as React from "react";
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -11,7 +10,6 @@ function Header({ records }) {
   const navigate = useNavigate();
   const location = useLocation();
   const IP_ADDRESS = import.meta.env.VITE_IP_ADDRESS;
-  // console.log("Location :", location);
   const query = new URLSearchParams(location.search);
   const LibraryId = query.get("id");
   let libraryData = records.find((item) => item.$id.value === LibraryId);
@@ -23,23 +21,21 @@ function Header({ records }) {
   let CheckUserLogin = username === loggedInUsername;
   // check delete Lirbary
   let CheckUserDelete = loggedInUsernameRole === "admin";
-
+  // Check admin edit records
+  let CheckAdminEdit = loggedInUsernameRole?.toLowerCase() === "admin";
   function onLogout() {
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("admin");
     navigate("/");
     window.location.reload();
   }
-
   useEffect(() => {
     if (records && records.length === 0) {
       navigate("/AddLibrary");
-    } else if (handleDelete && records ) {
-    // } else if (handleDelete && LibraryId === null && records && records.length > 0) {
+    } else if (handleDelete && records) {
       navigate(`/content?id=${records[0].$id.value}`);
     }
   }, []);
-
   // function delete
   const handleDelete = async (id) => {
     setLoading(true);
@@ -50,7 +46,6 @@ function Header({ records }) {
       },
       buttonsStyling: false,
     });
-
     swalWithBootstrapButtons
       .fire({
         title: "Are you sure?",
@@ -71,17 +66,11 @@ function Header({ records }) {
               .fire({
                 title: "Deleted!",
                 text: "",
-                // text: response.data.message,
                 icon: "success",
               })
               .then(() => {
                 window.location.reload();
                 navigate(`/content?id=${id}`);
-                // if (records && records.length > 0) {
-                //   navigate(`/content?id=${records[0].$id.value}`);
-                // } else {
-                //   navigate("/content");
-                // }
               });
           } catch (error) {
             console.error("Error deleting record:", error);
@@ -99,18 +88,12 @@ function Header({ records }) {
               icon: "error",
             })
             .then(() => {
-              // window.location.reload();
-              // Check when deleting records is to navigate to the first records
-              // if (records && records.length > 0) {
-              //   navigate(`/content?id=${libraryData}`);
-              // }
               window.location.href = `/content?id=${id}`;
             });
         }
         setLoading(false);
       });
   };
-
   return (
     <>
       {loading && <Spinner />}
@@ -136,25 +119,6 @@ function Header({ records }) {
             )}
           </div>
           <div className="navbar-actions">
-            {/* <input placeholder="Search" type="text"/> */}
-            {/* {CheckUserDelete && showEditDelete && (
-              <NavLink to={`/DeleteLibrary?id=${LibraryId}`}>
-                <button
-                  className="edit-library"
-                  onClick={() => handleDelete(`${LibraryId}`)}
-                  disabled={loading}
-                >
-                  Delete Library
-                </button>
-              </NavLink>
-            )}
-
-            {CheckUserLogin && showEditDelete && (
-              <NavLink to={`/EditLibrary?id=${LibraryId}`}>
-                <button className="edit-library">Edit Library</button>
-              </NavLink>
-            )} */}
-
             {location.pathname !== "/AddLibrary" && (
               <>
                 {CheckUserDelete && records && records.length > 0 && (
@@ -168,15 +132,13 @@ function Header({ records }) {
                     </button>
                   </NavLink>
                 )}
-
-                {CheckUserLogin && (
+                {(CheckUserLogin || CheckAdminEdit) (
                   <NavLink to={`/EditLibrary?id=${LibraryId}`}>
                     <button className="edit-library">Edit Library</button>
                   </NavLink>
                 )}
               </>
             )}
-
             <NavLink to="/AddLibrary">
               <button className="add-library">Add Library</button>
             </NavLink>
@@ -189,5 +151,4 @@ function Header({ records }) {
     </>
   );
 }
-
 export default Header;

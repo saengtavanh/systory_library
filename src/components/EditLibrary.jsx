@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../common/51-modern-default.css";
@@ -7,27 +6,19 @@ import { useLocation } from "react-router-dom";
 import "./AddLibrary.css";
 import FileInput from "./FileInput";
 import ImageInput from "./ImageInput";
-
 function EditLibrary({ records }) {
   const navigate = useNavigate();
   const IP_ADDRESS = import.meta.env.VITE_IP_ADDRESS;
-
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem("username");
     if (!isLoggedIn) {
       navigate("/");
     }
   }, [navigate]);
-
   const location = useLocation();
-  // console.log('location', location);
   const query = new URLSearchParams(location.search);
-  // console.log('query', query);
   const LibraryId = query.get("id");
-  // console.log('LibraryName', LibraryName);
-  // console.log(records);
   let libraryData = records.find((item) => item.$id.value == LibraryId);
-  // console.log("libraryData", libraryData);
   // form
   const [id, setId] = useState("");
   const [libraryName, setLibraryName] = useState("");
@@ -45,8 +36,6 @@ function EditLibrary({ records }) {
   const [idCounterInstallations, setIdCounterInstallation] = useState(1);
   const [idCounterHowToUse, setIdCounterHowToUse] = useState(1);
   const [idCounterExamPle, setIdCounterExamPle] = useState(1);
-  console.log("files", files);
-
   // Define the initial rows in state
   const [rowsInstallations, setRowsInstallations] = useState([
     { id: 1, title: "", description: "", example: "" },
@@ -57,7 +46,6 @@ function EditLibrary({ records }) {
   const [rowsExample, setRowsExamPle] = useState([
     { id: 1, title: "", description: "", example: "" },
   ]);
-
   useEffect(() => {
     if (libraryData) {
       setId(libraryData.$id.value);
@@ -69,7 +57,6 @@ function EditLibrary({ records }) {
       setExampleDes(libraryData.DESCRIPTIONS_EXP.value || "");
       setOverviewDes(libraryData.DESCRIPTIONS_OVER.value || "");
       setSuggestionDes(libraryData.DESCRIPTIONS_SGT.value || "");
-
       // Table inatallations
       const TableInstallations = libraryData.INSTALLATIONS.value.map(
         (item, index) => ({
@@ -79,7 +66,6 @@ function EditLibrary({ records }) {
           example: item.value.EXAMPLE_INS.value || "",
         })
       );
-
       // Table howtouse
       const TableHowToUse = libraryData.HOWTOUSE.value.map((item, index) => ({
         id: item.id,
@@ -87,7 +73,6 @@ function EditLibrary({ records }) {
         description: item.value.CONTENT_HTU.value || "",
         example: item.value.EXAMPLE_HTU.value || "",
       }));
-
       // Table example
       const TableExamPle = libraryData.EXAMPLE.value.map((item, index) => ({
         id: item.id,
@@ -95,21 +80,17 @@ function EditLibrary({ records }) {
         description: item.value.CONTENT_EXP.value || "",
         example: item.value.EXAMPLE_EXP.value || "",
       }));
-
       //set to State Table installations
       setRowsInstallations(TableInstallations);
       setIdCounterInstallation(TableInstallations.length + 1);
-
       //set to State Table Howtouse
       setRowsHowToUse(TableHowToUse);
       setIdCounterHowToUse(TableHowToUse.length + 1);
-
       //set to State Table example
       setRowsExamPle(TableExamPle);
       setIdCounterExamPle(TableExamPle.length + 1);
     }
   }, [libraryData]);
-
   // created functions keep input value
   const handleInputChangeTitle = (id, field, value, type) => {
     switch (type) {
@@ -138,7 +119,6 @@ function EditLibrary({ records }) {
         break;
     }
   };
-
   //Create functions add new row
   const addRow = (type, index) => {
     switch (type) {
@@ -185,7 +165,6 @@ function EditLibrary({ records }) {
         break;
     }
   };
-
   //Create functions remove row
   const removeRow = (id, type) => {
     switch (type) {
@@ -204,7 +183,6 @@ function EditLibrary({ records }) {
         break;
     }
   };
-
   // set username from sessionStorage to state
   useEffect(() => {
     const storedUsername = sessionStorage.getItem("username");
@@ -212,7 +190,6 @@ function EditLibrary({ records }) {
       setUserName(storedUsername);
     }
   }, []);
-
   useEffect(() => {
     if (libraryData && libraryData.FILE && libraryData.FILE.value) {
       const extractedFiles = libraryData.FILE.value.map((file) => ({
@@ -228,7 +205,6 @@ function EditLibrary({ records }) {
     } else {
       setFiles([]);
     }
-
     // file Image
     if (libraryData && libraryData.IMAGE && libraryData.IMAGE.value) {
       const extractedFilesImage = libraryData.IMAGE.value.map((image) => ({
@@ -246,56 +222,38 @@ function EditLibrary({ records }) {
     }
   }, [libraryData]);
   // get value file image
-  // console.log("File image ===== ", image);
-  // console.log("userName ===== ", userName);
-
   function onChangeFile(files) {
-    console.log("retriveFile:", files);
     for (let [key, value] of files.entries()) {
-      // console.log(key, value);
     }
     setFiles(files);
   }
-
   function onRemoveFile(files) {
-    console.log("removedFile:", files);
     for (let [key, value] of files.entries()) {
-      // console.log(key, value);
     }
     setFiles(files);
   }
-
   function onChangeImage(image) {
-    console.log("image", image);
     for (let [key, value] of image.entries()) {
-      // console.log(key, value);
     }
     setImage(image);
   }
   function onRemoveImage(image) {
-    // console.log("imageupdate", image);
     setImage(image);
-    // console.log(image);
   }
-
   // create function when the click button save
   async function handleSubmit(event) {
     event.preventDefault();
-
     const formData = new FormData();
     if (files && files.entries) {
-      // if (files) {
       for (let [key, value] of files.entries()) {
         formData.append(key, value);
       }
     }
-
     if (image && image.entries) {
       for (let [key, value] of image.entries()) {
         formData.append(key, value);
       }
     }
-
     const record = {
       id,
       libraryName,
@@ -311,9 +269,7 @@ function EditLibrary({ records }) {
       rowsExample,
       userName,
     };
-
     formData.append("record", JSON.stringify(record));
-    // console.log("Client", record);
     try {
       await axios
         .post(`${IP_ADDRESS}/Update/Data`, formData, {
@@ -321,18 +277,13 @@ function EditLibrary({ records }) {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then((response) => {
-          // console.log(response);
-        });
+        .then((response) => {});
       window.location.reload();
-      // navigate(`/content?id=${records[0].$id.value}`);
       window.location.href = `/content?id=${id}`;
-      // navigate("/");
     } catch (err) {
       console.error("Error uploading file client 4454545:", err);
     }
   }
-
   return (
     <>
       <main className="content-container">
@@ -363,7 +314,6 @@ function EditLibrary({ records }) {
                 </div>
               </div>
             </div>
-
             <div className="group-row">
               <div className="group">
                 <label>Description</label>
@@ -380,7 +330,6 @@ function EditLibrary({ records }) {
                 </div>
               </div>
             </div>
-
             <div className="group">
               <label>Reference</label>
               <div className="kintoneplugin-input-outer">
@@ -395,7 +344,6 @@ function EditLibrary({ records }) {
                 />
               </div>
             </div>
-
             <div className="group">
               <label>Attachment</label>
               <FileInput
@@ -406,7 +354,6 @@ function EditLibrary({ records }) {
             </div>
             {/* ============================ */}
           </section>
-
           {/* overview section */}
           <section className="section" id="overview">
             <div className="section-header">Overview</div>
@@ -563,7 +510,6 @@ function EditLibrary({ records }) {
               </div>
             </div>
           </section>
-
           {/* how to use section */}
           <section className="section" id="installation">
             <div className="section-header">How to use</div>
@@ -701,7 +647,6 @@ function EditLibrary({ records }) {
               </div>
             </div>
           </section>
-
           {/* Example section */}
           <section className="section" id="example">
             <div className="section-header">Example</div>
@@ -839,7 +784,6 @@ function EditLibrary({ records }) {
               </div>
             </div>
           </section>
-
           {/* Suggestion section */}
           <section className="section" id="suggestion">
             <div className="section-header">Suggestion</div>
@@ -859,7 +803,6 @@ function EditLibrary({ records }) {
               </div>
             </div>
           </section>
-
           <section className="section">
             <button
               className="submit"
@@ -876,5 +819,4 @@ function EditLibrary({ records }) {
     </>
   );
 }
-
 export default EditLibrary;

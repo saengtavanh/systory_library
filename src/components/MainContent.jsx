@@ -4,25 +4,16 @@ import { useLocation } from "react-router-dom";
 import Code from "./Code";
 import axios from "axios";
 import Spinner from "./Spinner";
-
 function MainContent({ records }) {
   const [fileUrls, setFileUrls] = useState([]);
   const [loading, setLoading] = useState(true);
   const IP_ADDRESS = import.meta.env.VITE_IP_ADDRESS;
-
   const location = useLocation();
-  // console.log('location', location);
   const query = new URLSearchParams(location.search);
-  // console.log('query', query);
   const LibraryId = query.get("id");
-  // console.log('LibraryName', LibraryName);
-
-  console.log(records);
   let libraryData = records
     ? records.find((item) => item.$id.value == LibraryId)
     : null;
-  // let libraryData = records.find((item) => item.$id.value == LibraryId);
-  // console.log("libraryData", libraryData);
   if (!libraryData) {
     return;
   }
@@ -42,7 +33,6 @@ function MainContent({ records }) {
     FILE,
     IMAGE,
   } = libraryData;
-
   // create funtions get file to set to useState
   const fetchFiles = async () => {
     try {
@@ -62,7 +52,6 @@ function MainContent({ records }) {
           };
         })
       );
-      // return { itemId: item.$id.value, fileUrls }; // Return the item ID and its corresponding file URLs
       const fileUrls = await Promise.all(files);
       const validFileUrls = fileUrls.filter((fileUrl) => fileUrl !== null);
       setFileUrls(fileUrls); // Store the map in the state
@@ -77,17 +66,14 @@ function MainContent({ records }) {
       });
     }
   }, [FILE]);
-
   function formatFileSize(bytes) {
     const units = ["B", "KB", "MB", "GB", "TB", "PB"];
     let size = bytes;
     let unitIndex = 0;
-
     while (size >= 1024 && unitIndex < units.length - 1) {
       size /= 1024;
       unitIndex++;
     }
-
     return `${size.toFixed(2)} ${units[unitIndex]}`;
   }
   return (
@@ -195,7 +181,6 @@ function MainContent({ records }) {
                   ))}
               </div>
             </section>
-
             {/* Reference section */}
             <section className="section" id="reference">
               <div className="section-header">Reference</div>
@@ -231,5 +216,4 @@ function MainContent({ records }) {
     </>
   );
 }
-
 export default MainContent;

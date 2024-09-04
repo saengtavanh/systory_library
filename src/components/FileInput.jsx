@@ -1,19 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./FileInput.css";
-
 const FileInput = (props) => {
   const inputRef = useRef();
-
   const [selectedFile, setSelectedFile] = useState([]);
-
   useEffect(() => {
-    // console.log("Initial files from props:", props.initialFiles);
     if (props.initialFiles && props.initialFiles.length > 0) {
       setSelectedFile(props.initialFiles);
     }
   }, [props.initialFiles]);
-
-  // console.log("setSelectedFile", selectedFile);
   // Handle the change event when a file is selected
   const handleOnChange = (event) => {
     const filesArray = Array.from(event.target.files);
@@ -26,43 +20,26 @@ const FileInput = (props) => {
     setSelectedFile(updatedFiles);
     const formData = new FormData();
     for (let file of updatedFiles) {
-      // console.log(file);
       const blob = new Blob([file], { type: file.type });
       formData.append("files", blob, file.name);
     }
     props.onChangeFile(formData);
   };
-
   const onChooseFile = () => {
     inputRef.current.click();
   };
-
   function removeFile(index) {
-    // console.log(index);
     let updatedFiles = [
       ...selectedFile.filter((item) => selectedFile.indexOf(item) != index),
     ];
     setSelectedFile(updatedFiles);
     const formData = new FormData();
     for (let file of updatedFiles) {
-      // console.log(file);
       const blob = new Blob([file], { type: file.type });
       formData.append("files", blob, file.name);
     }
     props.onRemoveFile(formData);
   }
-
-  // const removeFile = (index) => {
-  //   const updatedFiles = selectedFile.filter((_, i) => i !== index);
-  //   setSelectedFile(updatedFiles);
-
-  //   const formData = new FormData();
-  //   updatedFiles.forEach((file) => {
-  //     formData.append("files", file, file.name);
-  //   });
-  //   props.onRemoveFile(formData);
-  // };
-
   return (
     <div>
       {/* Hidden file input element */}
@@ -73,12 +50,10 @@ const FileInput = (props) => {
         style={{ display: "none" }}
         multiple
       />
-
       {/* Button to trigger the file input dialog */}
       <button className="file-btn" onClick={onChooseFile}>
         <i className="fa-solid fa-cloud-arrow-up"></i> Upload File
       </button>
-
       {selectedFile &&
         selectedFile.length > 0 &&
         selectedFile.map((file, index) => (
@@ -93,5 +68,4 @@ const FileInput = (props) => {
     </div>
   );
 };
-
 export default FileInput;

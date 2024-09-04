@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../common/51-modern-default.css";
@@ -6,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import "./AddLibrary.css";
 import FileInput from "./FileInput";
 import ImageInput from "./ImageInput";
-
 function AddLibrary() {
   const navigate = useNavigate();
   const IP_ADDRESS = import.meta.env.VITE_IP_ADDRESS;
@@ -34,7 +32,6 @@ function AddLibrary() {
   const [idCounterInstallations, setIdCounterInstallation] = useState(1);
   const [idCounterHowToUse, setIdCounterHowToUse] = useState(1);
   const [idCounterExamPle, setIdCounterExamPle] = useState(1);
-
   // Define the initial rows in state
   const [rowsInstallations, setRowsInstallations] = useState([
     { id: 1, title: "", description: "", example: "" },
@@ -74,7 +71,6 @@ function AddLibrary() {
         break;
     }
   };
-
   //Create functions add new row
   const addRow = (type, index) => {
     switch (type) {
@@ -121,7 +117,6 @@ function AddLibrary() {
         break;
     }
   };
-
   //Create functions remove row
   const removeRow = (id, type) => {
     switch (type) {
@@ -140,14 +135,12 @@ function AddLibrary() {
         break;
     }
   };
-
   useEffect(() => {
     const storedUsername = sessionStorage.getItem("username");
     if (storedUsername) {
       setUserName(storedUsername);
     }
   }, []);
-
   function onChangeFile(files) {
     console.log("retriveFile:", files);
     for (let [key, value] of files.entries()) {
@@ -162,7 +155,6 @@ function AddLibrary() {
     }
     setFiles(files);
   }
-
   function onChangeImage(image) {
     console.log("image", image);
     for (let [key, value] of image.entries()) {
@@ -175,18 +167,15 @@ function AddLibrary() {
     setImage(image);
     // console.log(image);
   }
-
   // create function when the click button save
   async function handleSubmit(event) {
     event.preventDefault();
-
     const formData = new FormData();
     if (files && files.entries) {
       for (let [key, value] of files.entries()) {
         formData.append(key, value);
       }
     }
-
     if (image && image.entries) {
       for (let [key, value] of image.entries()) {
         formData.append(key, value);
@@ -206,7 +195,6 @@ function AddLibrary() {
       rowsHowToUse,
       rowsExample,
     };
-
     formData.append("record", JSON.stringify(record));
     console.log("Client", record);
     try {
@@ -228,7 +216,6 @@ function AddLibrary() {
       console.error("Error uploading file client 4454545:", err);
     }
   }
-
   return (
     <>
       <main className="content-container">
@@ -257,7 +244,6 @@ function AddLibrary() {
                 </div>
               </div>
             </div>
-
             <div className="group-row">
               <div className="group">
                 <label>Description</label>
@@ -273,7 +259,6 @@ function AddLibrary() {
                 </div>
               </div>
             </div>
-
             <div className="group">
               <label>Reference</label>
               <div className="kintoneplugin-input-outer">
@@ -287,7 +272,6 @@ function AddLibrary() {
                 />
               </div>
             </div>
-
             <div className="group">
               <label>Attachment</label>
               <FileInput
@@ -295,9 +279,7 @@ function AddLibrary() {
                 onRemoveFile={onRemoveFile}
               />
             </div>
-            {/* ============================ */}
           </section>
-
           {/* overview section */}
           <section className="section" id="overview">
             <div className="section-header">Overview</div>
@@ -452,7 +434,6 @@ function AddLibrary() {
               </div>
             </div>
           </section>
-
           {/* how to use section */}
           <section className="section" id="installation">
             <div className="section-header">How to use</div>
@@ -589,7 +570,6 @@ function AddLibrary() {
               </div>
             </div>
           </section>
-
           {/* Example section */}
           <section className="section" id="example">
             <div className="section-header">Example</div>
@@ -726,7 +706,6 @@ function AddLibrary() {
               </div>
             </div>
           </section>
-
           {/* Suggestion section */}
           <section className="section" id="suggestion">
             <div className="section-header">Suggestion</div>
@@ -745,7 +724,6 @@ function AddLibrary() {
               </div>
             </div>
           </section>
-
           <section className="section">
             <button
               className="submit"
@@ -762,5 +740,4 @@ function AddLibrary() {
     </>
   );
 }
-
 export default AddLibrary;

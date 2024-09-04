@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FaClipboard, FaCheck, FaTimes, FaRegCopy } from "react-icons/fa";
 import Prism from "prismjs";
-import "prismjs/themes/prism-tomorrow.css"; // Import Prism's CSS theme
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import "./Code.css";
-
 const Code = ({ code }) => {
   const [copied, setCopied] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -20,35 +19,21 @@ const Code = ({ code }) => {
     color: #ddd;
   }`
     : code;
-  // const copyText = npm install https://github.com/indexzero/forever/tarball/v0.5.6;
   const [codeType, setCodeType] = useState("");
-
-  const copyToClipboard = () => {
-
-    console.log(navigator);
-    navigator.clipboard
-      .writeText(copyText)
-      .then(() => {
-        setCopied(true);
-        setShowAlert(true);
-        setTimeout(() => {
-          setCopied(false);
-          setShowAlert(false);
-        }, 2000);
-      })
-      .catch((err) => {
-        console.log("Something went wrong", err);
-      });
+  const handleCopy = () => {
+    setCopied(true);
+    setShowAlert(true);
+    setTimeout(() => {
+      setCopied(false);
+      setShowAlert(false);
+    }, 2000);
   };
-
   // check domain name for
   const determineCodeType = (text) => {
     const lowerText = text.toLowerCase();
-
     // HTML detection
     if (lowerText.includes("<html") || lowerText.includes("<div"))
       return "html";
-
     // JavaScript detection
     if (
       lowerText.includes("function") ||
@@ -58,14 +43,11 @@ const Code = ({ code }) => {
       lowerText.includes("=>") // for arrow functions
     )
       return "js";
-
     // CSS detection
     if (lowerText.includes("{") && lowerText.includes("}")) return "css";
-
     // Bash detection
     if (lowerText.includes("npm install") || lowerText.includes("npm i"))
       return "bash";
-
     // JSX/React detection
     if (
       lowerText.includes("import react") ||
@@ -74,15 +56,12 @@ const Code = ({ code }) => {
       lowerText.includes("export default") // general React pattern
     )
       return "jsx";
-
     // Vue.js detection
     if (lowerText.includes("<template>") && lowerText.includes("<script>"))
       return "vue";
-
     // Sublime Text configuration detection
     if (lowerText.includes("1.") && lowerText.includes("sublime text"))
       return "text";
-
     // Python detection
     if (
       lowerText.includes("def ") ||
@@ -90,7 +69,6 @@ const Code = ({ code }) => {
       lowerText.includes("print(")
     )
       return "python";
-
     // Ruby detection
     if (
       lowerText.includes("class ") ||
@@ -99,7 +77,6 @@ const Code = ({ code }) => {
       lowerText.includes("require '")
     )
       return "ruby";
-
     // Add more types as needed
     // For example, checking for SQL
     if (
@@ -109,7 +86,6 @@ const Code = ({ code }) => {
       lowerText.includes("delete from")
     )
       return "sql";
-
     // Check for PHP
     if (
       lowerText.includes("<?php") ||
@@ -117,14 +93,12 @@ const Code = ({ code }) => {
       lowerText.includes("$")
     )
       return "php";
-
     // Check for Java
     if (
       lowerText.includes("public class") ||
       lowerText.includes("public static void main")
     )
       return "java";
-
     // Check for C#
     if (
       lowerText.includes("using System;") ||
@@ -132,18 +106,14 @@ const Code = ({ code }) => {
       lowerText.includes("class ")
     )
       return "c#";
-
     return "unknown";
   };
-
   useEffect(() => {
     setCodeType(determineCodeType(copyText));
   }, [copyText]);
-
   useEffect(() => {
     Prism.highlightAll();
-  }, [codeType, copyText]);
-
+  }, [codeType]);
   return (
     <>
       {showAlert && (
@@ -155,15 +125,16 @@ const Code = ({ code }) => {
       <div className="copy-container">
         <div className="copy-header">
           <span className="copy-header-text">{codeType}</span>
-          <div className="copy-icon" onClick={copyToClipboard}>
-            {copied ? <FaCheck size={16} /> : <FaClipboard size={16} />}
-            <span className="copy-text">{copied ? "Copied" : "Copy"}</span>
-          </div>
+          <CopyToClipboard text={copyText} onCopy={handleCopy}>
+            <div className="copy-icon">
+              {copied ? <FaCheck size={16} /> : <FaClipboard size={16} />}
+              <span className="copy-text">{copied ? "Copied" : "Copy"}</span>
+            </div>
+          </CopyToClipboard>
         </div>
         <pre className="copy-code">{copyText}</pre>
       </div>
     </>
   );
 };
-
 export default Code;

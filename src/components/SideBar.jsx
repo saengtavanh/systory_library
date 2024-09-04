@@ -2,15 +2,12 @@ import "./SideBar.css";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-
 function SideBar({ records }) {
-  // console.log("sidebar", records);
   const [search, setSearch] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const query = new URLSearchParams(location.search);
   let activeLibraryId = query.get("id");
-
   // check data value
   if (!records && records.length > 0) {
     return null;
@@ -18,7 +15,6 @@ function SideBar({ records }) {
   const filteredLibraries = records.filter((item) =>
     item.LIB_NAME.value.toLowerCase().includes(search.toLowerCase())
   );
-
   return (
     <>
       <aside className="sidebar">
@@ -48,5 +44,4 @@ function SideBar({ records }) {
     </>
   );
 }
-
 export default SideBar;

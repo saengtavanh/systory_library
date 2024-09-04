@@ -19,21 +19,18 @@ import Login from "./components/Login";
 import AddLibrary from "./components/AddLibrary";
 import EditLibrary from "./components/EditLibrary";
 import Spinner from "./components/Spinner";
-
 function App() {
   const [loggedIn, setLoggedIn] = useState("");
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showComponents, setShowComponents] = useState(false);
   const IP_ADDRESS = import.meta.env.VITE_IP_ADDRESS;
-
   useEffect(() => {
     async function fetchRecords() {
       try {
         setLoading(true);
         const response = await axios.get(`${IP_ADDRESS}/`);
         setRecords(response.data.data.records);
-        // console.log(response.data.data.records);
       } catch (error) {
         console.error("Failed to fetch records", error);
       } finally {
@@ -41,15 +38,12 @@ function App() {
         setShowComponents(true);
       }
     }
-
     // Adding setTimeout to delay the fetchRecords execution
     const timeoutId = setTimeout(() => {
       fetchRecords();
     }, 1000); // 2000 ms (2 seconds) delay
-
     return () => clearTimeout(timeoutId);
   }, []);
-
   return (
     <>
       <BrowserRouter>
@@ -85,5 +79,4 @@ function App() {
     </>
   );
 }
-
 export default App;
