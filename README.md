@@ -12,6 +12,7 @@
    - npm install sweetalert2@^11.12.0
    - npm install highlight.js
    - npm install bootstrap@^5.2.0
+   - npm install react-copy-to-clipboard
 2.  How To Build A Project SystoryLibrary
     - npm run dev
 
